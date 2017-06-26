@@ -2,14 +2,14 @@
 
 The following table shows the running times (in seconds) of 4 backup tools when backing up the entire Linux code base:
 
-| Backup             | **Duplicacy** |   restic   |   Attic    |  duplicity  | 
+| Backup             | Duplicacy |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:-------------:|:----------:|:----------:|:-----------:|
-| Initial Backup     |   *11.7*      |    21.9    |    28.7    |     46.3    |
-| 2nd Backup         |    *3.8*      |     7.8    |    16.3    |     21.9    |
-| 3rd Backup         |    *5.6*      |    11.9    |    21.4    |     29.6    |
-| 4th Backup         |    *3.3*      |     8.2    |    16.7    |     24.7    |
-| 5th Backup         |    *7.9*      |    11.3    |    21.2    |     32.1    |
-| 6th Backup         |    *4.4*      |     8.9    |    20.1    |     26.1    |
+| Initial Backup     |   **11.7**      |    21.9    |    28.7    |     46.3    |
+| 2nd Backup         |    **3.8**      |     7.8    |    16.3    |     21.9    |
+| 3rd Backup         |    **5.6**      |    11.9    |    21.4    |     29.6    |
+| 4th Backup         |    **3.3**      |     8.2    |    16.7    |     24.7    |
+| 5th Backup         |    **7.9**      |    11.3    |    21.2    |     32.1    |
+| 6th Backup         |    **4.4**      |     8.9    |    20.1    |     26.1    |
 
 Duplicacy is not only the fastest, but also almost twice as faster as the second fastest!
 
