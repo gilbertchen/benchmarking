@@ -29,9 +29,10 @@ The following table lists serveral important configuration parameters or algorit
 | Average chunk size |     1MB [1]    |    1MB               |     2MB    |     25MB     |
 | Hash               |     blake2    |    SHA256             |  blake2 [2]|  SHA1    |
 | Compression        |    lz4        |    not impelmented    |    lz4     | zlib level 1|
-| Encryption         |    AES-GCM    |   AES-CTR             |            |  GnuPG      |
+| Encryption         |    AES-GCM    |   AES-CTR             |  AES-CTR   |  GnuPG      |
 
 [1] The default average chunk size for Duplicacy is 4MB; we chose 1MB to match that of restic
+
 [2] Enabled by `-e repokey-blake2` which is only available in 1.1.0+
 
 ## Backing up the Linux code base
@@ -53,7 +54,19 @@ Here are the elapsed real times in seconds as reported by the `time` command, wi
 | 5th Backup         | 7.9 (8.7, 0.9)   | 11.3 (35.9, 4.5) | 21.2 (17.2, 2.2) | 32.1 (30.3, 2.1) |
 | 6th Backup         | 4.4 (4.3, 0.7)   | 8.9 (19.0, 3.3)  | 20.1 (16.2, 2.0) | 26.1 (24.0, 1.5) |
 
-Clearly Dupicacy is the winner by a large margin.  It is interesting to note that restic, while being the second fastest, consumed so much CPU that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by an implementation issue in its local storage backend, 
+Clearly Duplicacy is the winner by a confortable margin.  It is interesting to note that restic, while being the second fastest, consumed excessive CPU such that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely, goroutines) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down the backup speeds.
 
+Now let us look at the sizes of the backup storage after each backup:
 
+| Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
+|:------------------:|:----------------:|:----------:|:----------:|:-----------:|
+| Initial Backup     | 223MB | 631MB | 259MB | 183MB |
+| 2nd Backup         | 244MB | 692MB | 280MB | 185MB |
+| 3rd Backup         | 331MB | 912MB | 367MB | 203MB |
+| 4th Backup         | 339MB | 934MB | 374MB | 204MB |
+| 5th Backup         | 427MB | 1.1GB | 466MB | 222MB |
+| 6th Backup         | 455MB | 1.2GB | 492MB | 224MB |
 
+Although duplicity may look like a winner in terms of storage efficiency, it should be noted that duplicity uses zlib, which is known to compress better than lz4 using by Duplicacy and Attic.  Moreoever, unlike other 3, duplicity is the only one that has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup in duplicity saves a lot of storage space, it also becomes dependent on previous backups, and not a single one can be easily deleted.  So there is always a question of how often to perform a full backup for duplicity users.
+
+In contrast, in other 3 tools, a backup is always incremental in nature but appears to be a full backup.  Any backup can be individually deleted without affecting others, or indepdently restored, unlike the case in duplicacy where a restore option has to start at a full backup and then follow a chain of incremental backups to reach the one to be restored.
