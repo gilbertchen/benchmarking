@@ -27,7 +27,7 @@ The following table lists serveral important configuration parameters or algorit
 |:------------------:|:-------------:|:---------------------:|:----------:|:-----------:|
 | Version            |   2.0.3      |    0.6.1               |    BorgBackup 1.1.0b6    |    0.7.12    |
 | Average chunk size |     1MB <sup>[1]</sup>    |    1MB               |     2MB    |     25MB     |
-| Hash               |     blake2    |    SHA256             |  blake2 [<sup>[2]</sup>|  SHA1    |
+| Hash               |     blake2    |    SHA256             |  blake2 <sup>[2]</sup>|  SHA1    |
 | Compression        |    lz4        |    not impelmented    |    lz4     | zlib level 1|
 | Encryption         |    AES-GCM    |   AES-CTR             |  AES-CTR   |  GnuPG      |
 
