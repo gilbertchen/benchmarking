@@ -2,7 +2,7 @@
 
 The following table shows the running times (in seconds) of 4 backup tools when backing up the entire Linux code base:
 
-| Backup             | Duplicacy |   restic   |   Attic    |  duplicity  | 
+| Backup             | [Duplicacy](https://github.com/gilbertchen/duplicacy) |   [restic](https://github.com/restic/restic)   |   [Attic](https://github.com/borgbackup/borg)    |  duplicity(https://duplicity.nongnu.org/)  | 
 |:------------------:|:-------------:|:----------:|:----------:|:-----------:|
 | Initial Backup     |   **11.7**      |    21.9    |    28.7    |     46.3    |
 | 2nd Backup         |    **3.8**      |     7.8    |    16.3    |     21.9    |
