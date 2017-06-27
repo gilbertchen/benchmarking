@@ -26,12 +26,14 @@ The following table lists serveral important configuration parameters or algorit
 | Configuration      |   Duplicacy   |   restic              |   Attic    |  duplicity  | 
 |:------------------:|:-------------:|:---------------------:|:----------:|:-----------:|
 | Version            |   2.0.3      |    0.6.1               |    BorgBackup 1.1.0b6    |    0.7.12    |
-| Average chunk size |     4MB     |    1MB               |     2MB    |     25MB     |
-| Hash               |     blake2    |    SHA256             |  blake2 <sup>[1]</sup>|  SHA1    |
+| Average chunk size |     4MB<sup>[1]</sup>     |    1MB               |     2MB    |     25MB     |
+| Hash               |     blake2    |    SHA256             |  blake2 <sup>[2]</sup>|  SHA1    |
 | Compression        |    lz4        |    not impelmented    |    lz4     | zlib level 1|
 | Encryption         |    AES-GCM    |   AES-CTR             |  AES-CTR   |  GnuPG      |
 
-[1] Enabled by `-e repokey-blake2` which is only available in 1.1.0+
+[1] The chunk size in Duplicacy is configurable with the default being 4MB.  Changing to 1MB or 2MB appeared to have little impact on the performance
+
+[2] Enabled by `-e repokey-blake2` which is only available in 1.1.0+
 
 ## Backing up the Linux code base
 
