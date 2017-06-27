@@ -43,7 +43,7 @@ To test incremental backup, we selected a commit on July 2016 and rolled back th
 
 Backups were all saved to a storage directory on the same hard disk as the code base, to eliminate the performance variations caused by different implementation of networked or cloud storage backends.
 
-Here are the elapsed real times in seconds as reported by the `time` command, with the user CPU time and sytem CPU time in the parentheses:
+Here are the elapsed real times in seconds as reported by the `time` command, with the user CPU times and sytem CPU times in the parentheses:
 
 | Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
