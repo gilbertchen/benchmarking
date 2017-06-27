@@ -4,12 +4,12 @@ The following table shows the running times (in seconds) of 4 backup tools when 
 
 | Backup             | [Duplicacy](https://github.com/gilbertchen/duplicacy) |   [restic](https://github.com/restic/restic)   |   [Attic](https://github.com/borgbackup/borg)    |  [duplicity](http://duplicity.nongnu.org/)  | 
 |:------------------:|:-------------:|:----------:|:----------:|:-----------:|
-| Initial Backup     |   **11.7**      |    21.9    |    28.7    |     46.3    |
-| 2nd Backup         |    **3.8**      |     7.8    |    16.3    |     21.9    |
-| 3rd Backup         |    **5.6**      |    11.9    |    21.4    |     29.6    |
-| 4th Backup         |    **3.3**      |     8.2    |    16.7    |     24.7    |
-| 5th Backup         |    **7.9**      |    11.3    |    21.2    |     32.1    |
-| 6th Backup         |    **4.4**      |     8.9    |    20.1    |     26.1    |
+| Initial Backup     |   **11.7s**      |    21.9s    |    28.7s    |     46.3s    |
+| 2nd Backup         |    **3.8s**      |     7.8s    |    16.3s    |     21.9s    |
+| 3rd Backup         |    **5.6s**      |    11.9s    |    21.4s    |     29.6s    |
+| 4th Backup         |    **3.3s**      |     8.2s    |    16.7s    |     24.7s    |
+| 5th Backup         |    **7.9s**      |    11.3s    |    21.2s    |     32.1s    |
+| 6th Backup         |    **4.4s**      |     8.9s    |    20.1s    |     26.1s    |
 
 Duplicacy is not only the fastest, but also almost twice as faster as the second fastest!
 
