@@ -1,21 +1,9 @@
-## Summary
+## Objective
 
-The following table shows the running times (in seconds) of 4 backup tools when backing up the entire Linux code base:
-
-| Backup             | [Duplicacy](https://github.com/gilbertchen/duplicacy) |   [restic](https://github.com/restic/restic)   |   [Attic](https://github.com/borgbackup/borg)    |  [duplicity](http://duplicity.nongnu.org/)  | 
-|:------------------:|:-------------:|:----------:|:----------:|:-----------:|
-| Initial Backup     |   **11.7s**      |    21.9s    |    28.7s    |     46.3s    |
-| 2nd Backup         |    **3.8s**      |     7.8s    |    16.3s    |     21.9s    |
-| 3rd Backup         |    **5.6s**      |    11.9s    |    21.4s    |     29.6s    |
-| 4th Backup         |    **3.3s**      |     8.2s    |    16.7s    |     24.7s    |
-| 5th Backup         |    **7.9s**      |    11.3s    |    21.2s    |     32.1s    |
-| 6th Backup         |    **4.4s**      |     8.9s    |    20.1s    |     26.1s    |
-
-Duplicacy is not only the fastest, but also almost twice as faster as the second fastest!
+To compare the performance and storage efficiency of 4 backup tools, [Duplicacy](https://github.com/gilbertchen/duplicacy), [restic](https://github.com/restic/restic), [Attic](https://github.com/borgbackup/borg), and [duplicity](http://duplicity.nongnu.org/)
 
 ## Disclaimer
 As the developer of Duplicacy, I have little firsh-hand experience with other tools, other than setting them up and running for these experiements for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should be taken with a grain of salt until they are independently confirmed by other people.
-
 
 ## Setup
 
@@ -26,12 +14,12 @@ The following table lists serveral important configuration parameters or algorit
 | Configuration      |   Duplicacy   |   restic              |   Attic    |  duplicity  | 
 |:------------------:|:-------------:|:---------------------:|:----------:|:-----------:|
 | Version            |   2.0.3      |    0.6.1               |    BorgBackup 1.1.0b6    |    0.7.12    |
-| Average chunk size |     4MB<sup>[1]</sup>     |    1MB               |     2MB    |     25MB     |
+| Average chunk size |     1MB<sup>[1]</sup>     |    1MB               |     2MB    |     25MB     |
 | Hash               |     blake2    |    SHA256             |  blake2 <sup>[2]</sup>|  SHA1    |
 | Compression        |    lz4        |    not impelmented    |    lz4     | zlib level 1|
 | Encryption         |    AES-GCM    |   AES-CTR             |  AES-CTR   |  GnuPG      |
 
-[1] The chunk size in Duplicacy is configurable with the default being 4MB.  Changing to 1MB or 2MB appeared to have little impact on the performance
+[1] The chunk size in Duplicacy is configurable with the default being 4MB.  We set it to 1MB to match that of restic
 
 [2] Enabled by `-e repokey-blake2` which is only available in 1.1.0+
 
@@ -43,18 +31,25 @@ To test incremental backup, we selected a commit on July 2016 and rolled back th
 
 Backups were all saved to a storage directory on the same hard disk as the code base, to eliminate the performance variations caused by different implementation of networked or cloud storage backends.
 
-Here are the elapsed real times in seconds as reported by the `time` command, with the user CPU times and sytem CPU times in the parentheses:
+Here are the elapsed real times (in seconds) as reported by the `time` command, with the user CPU times and sytem CPU times in the parentheses:
 
 | Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
-| Initial Backup     | 11.7 (13.1, 1.7) | 21.9 (70.9, 9.9) | 28.7 (24.0, 3.6) | 46.3 (58.6, 4.7) |
-| 2nd Backup         | 3.8 (3.4, 0.5)   | 7.8 (15.8, 2.8)  | 16.3 (14.0, 1.6) | 21.9 (19.1, 1.4) |
-| 3rd Backup         | 5.6 (6.3, 0.8)   | 11.9 (31.7, 4.0) | 21.4 (17.8, 2.4) | 29.6 (28.4, 2.0) |
-| 4th Backup         | 3.3 (3.0, 0.5)   | 8.2 (14.4, 2.8)  | 16.7 (14.8, 1.6) | 24.7 (22.3, 1.3) |
-| 5th Backup         | 7.9 (8.7, 0.9)   | 11.3 (35.9, 4.5) | 21.2 (17.2, 2.2) | 32.1 (30.3, 2.1) |
-| 6th Backup         | 4.4 (4.3, 0.7)   | 8.9 (19.0, 3.3)  | 20.1 (16.2, 2.0) | 26.1 (24.0, 1.5) |
+| Initial backup | 13.7 ( 16.9 , 1.6 ) | 20.7 ( 69.9 , 9.9 ) | 26.9 ( 23.1 , 3.1 ) | 44.2 ( 56.3 , 4.6 ) | 
+| 2nd backup | 4.8 ( 4.8 , 0.5 ) | 8.0 ( 15.3 , 2.5 ) | 15.4 ( 13.4 , 1.5 ) | 19.5 ( 17.9 , 1.1 ) | 
+| 3rd backup | 6.9 ( 8.0 , 1.0 ) | 11.9 ( 32.2 , 4.0 ) | 19.6 ( 16.4 , 2.0 ) | 29.8 ( 29.3 , 1.9 ) | 
+| 4th backup | 3.3 ( 3.1 , 0.4 ) | 7.0 ( 12.7 , 2.2 ) | 13.7 ( 12.1 , 1.2 ) | 18.6 ( 17.3 , 0.9 ) | 
+| 5th backup | 9.9 ( 11.0 , 1.0 ) | 11.4 ( 33.5 , 3.8 ) | 19.9 ( 17.1 , 2.1 ) | 28.0 ( 27.6 , 1.5 ) | 
+| 6th backup | 3.8 ( 3.9 , 0.5 ) | 8.0 ( 17.7 , 2.7 ) | 16.8 ( 14.1 , 1.6 ) | 22.0 ( 20.7 , 1.0 ) | 
+| 7th backup | 5.1 ( 5.1 , 0.5 ) | 7.8 ( 16.0 , 2.4 ) | 14.3 ( 12.6 , 1.3 ) | 21.6 ( 20.3 , 1.0 ) | 
+| 8th backup | 9.5 ( 10.8 , 1.1 ) | 13.5 ( 49.3 , 4.8 ) | 18.3 ( 15.9 , 1.8 ) | 35.0 ( 33.6 , 1.9 ) | 
+| 9th backup | 4.3 ( 4.5 , 0.6 ) | 9.0 ( 20.6 , 2.8 ) | 15.7 ( 13.7 , 1.5 ) | 24.9 ( 23.6 , 1.1 ) | 
+| 10th backup | 7.9 ( 9.1 , 0.9 ) | 20.2 ( 38.4 , 4.7 ) | 32.2 ( 18.1 , 2.3 ) | 35.0 ( 33.8 , 1.8 ) | 
+| 11th backup | 4.6 ( 4.5 , 0.6 ) | 9.1 ( 19.6 , 2.8 ) | 16.8 ( 14.5 , 1.7 ) | 28.1 ( 26.4 , 1.3 ) | 
+| 12th backup | 7.4 ( 8.8 , 1.0 ) | 12.0 ( 38.4 , 4.0 ) | 21.7 ( 18.4 , 2.2 ) | 37.4 ( 37.0 , 2.0 ) | 
 
-Clearly Duplicacy is the winner by a confortable margin.  It is interesting to note that restic, while being the second fastest, consumed excessive CPU such that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely, goroutines) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down the backup speeds.
+
+Clearly Duplicacy was the winner by a confortable margin.  It is interesting that restic, while being the second fastest, consumed excessive CPU (especially during the initial backup) such that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down the backup speeds.
 
 Now let us look at the sizes of the backup storage after each backup:
 
@@ -67,4 +62,21 @@ Now let us look at the sizes of the backup storage after each backup:
 | 5th Backup         | 427MB | 1.1GB | 466MB | 222MB |
 | 6th Backup         | 455MB | 1.2GB | 492MB | 224MB |
 
-Although duplicity is the most storage efficient, it should be noted that it uses zlib, which is known to compress better than lz4 used by Duplicacy and Attic.  Moreoever, unlike other 3, duplicity is the only one that has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup in duplicity saves a lot of storage space, it also becomes dependent on previous backups, making it impossible to delete any single backup on the long chain of dependent backups. A long chain of dependent backups also significantly slow down the restore operation, which has to start at a full backup and then follow the incremental backups on the chain to reach the desired one.  So there is always a dilemma of how often to perform a full backup for duplicity users.  In contrast, in other 3 tools, a backup is always incremental in nature but appears to be a full backup.  Any backup can be individually deleted without affecting others, or indepdently restored.
+Although duplicity was the most storage efficient, it should be noted that it uses zlib, which is known to compress better than lz4 used by Duplicacy and Attic.  Moreoever, duplicity has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup in duplicity saves a lot of storage space, it is also dependent on previous backups, making it impossible to delete any single backup on a long chain of dependent backups. So there is always a dilemma of how often to perform a full backup for duplicity users.
+
+We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups create later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, Duplicacy doesn't pack chunks, and any backup can be quickly restored from chunks that contained in that backup, with to the need to retrieve data from other backups.
+
+| Initial backup | 38.8 ( 18.4 , 11.5 ) | 38.4 ( 17.3 , 8.6 ) | 81.5 ( 18.8 , 12.5 ) | 251.6 ( 133.4 , 51.9 ) | 
+| 2nd backup | 35.2 ( 11.5 , 12.9 ) | 92.7 ( 25.1 , 12.6 ) | 41.1 ( 17.0 , 11.4 ) | 256.6 ( 133.7 , 48.4 ) | 
+| 3rd backup | 33.9 ( 9.7 , 10.9 ) | 136.7 ( 27.7 , 15.0 ) | 35.3 ( 17.3 , 11.5 ) | 231.4 ( 134.5 , 46.9 ) | 
+| 4th backup | 34.5 ( 14.0 , 10.8 ) | 149.7 ( 26.9 , 15.1 ) | 46.4 ( 17.9 , 12.5 ) | 213.8 ( 134.5 , 43.5 ) | 
+| 5th backup | 30.2 ( 9.4 , 9.4 ) | 198.3 ( 28.6 , 17.3 ) | 58.2 ( 18.9 , 13.3 ) | 236.4 ( 134.3 , 49.2 ) | 
+| 6th backup | 34.7 ( 11.2 , 9.3 ) | 348.6 ( 30.2 , 20.8 ) | 65.5 ( 19.5 , 13.4 ) | 250.7 ( 135.3 , 40.9 ) | 
+| 7th backup | 36.8 ( 9.2 , 9.6 ) | 238.8 ( 29.3 , 18.6 ) | 64.8 ( 19.4 , 13.6 ) | 225.7 ( 125.1 , 42.7 ) | 
+| 8th backup | 26.0 ( 9.7 , 8.1 ) | 251.5 ( 32.5 , 21.7 ) | 83.1 ( 20.9 , 14.3 ) | 261.0 ( 126.0 , 45.3 ) | 
+| 9th backup | 31.5 ( 8.8 , 8.7 ) | 269.5 ( 31.0 , 21.0 ) | 80.3 ( 20.5 , 14.1 ) | 230.6 ( 126.8 , 43.0 ) | 
+| 10th backup | 40.5 ( 8.7 , 8.1 ) | 290.6 ( 32.0 , 22.1 ) | 91.9 ( 21.5 , 15.0 ) | 242.4 ( 128.9 , 46.3 ) | 
+| 11th backup | 34.6 ( 8.3 , 7.6 ) | 472.7 ( 33.0 , 26.3 ) | 125.3 ( 22.3 , 15.1 ) | 278.5 ( 127.9 , 49.1 ) | 
+| 12th backup | 76.4 ( 20.4 , 13.1 ) | 387.7 ( 33.4 , 24.7 ) | 103.2 ( 23.1 , 16.1 ) | 240.3 ( 134.9 , 44.8 ) | 
+
+
