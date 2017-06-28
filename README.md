@@ -66,6 +66,8 @@ Although duplicity was the most storage efficient, it should be noted that it us
 
 We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups create later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, Duplicacy doesn't pack chunks, and any backup can be quickly restored from chunks that contained in that backup, with to the need to retrieve data from other backups.
 
+| Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
+|:------------------:|:----------------:|:----------:|:----------:|:-----------:|
 | Initial backup | 38.8 ( 18.4 , 11.5 ) | 38.4 ( 17.3 , 8.6 ) | 81.5 ( 18.8 , 12.5 ) | 251.6 ( 133.4 , 51.9 ) | 
 | 2nd backup | 35.2 ( 11.5 , 12.9 ) | 92.7 ( 25.1 , 12.6 ) | 41.1 ( 17.0 , 11.4 ) | 256.6 ( 133.7 , 48.4 ) | 
 | 3rd backup | 33.9 ( 9.7 , 10.9 ) | 136.7 ( 27.7 , 15.0 ) | 35.3 ( 17.3 , 11.5 ) | 231.4 ( 134.5 , 46.9 ) | 
