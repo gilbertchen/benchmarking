@@ -3,7 +3,7 @@
 To compare the performance and storage efficiency of 4 backup tools, [Duplicacy](https://github.com/gilbertchen/duplicacy), [restic](https://github.com/restic/restic), [Attic](https://github.com/borgbackup/borg), and [duplicity](http://duplicity.nongnu.org/)
 
 ## Disclaimer
-As the developer of Duplicacy, I have little first-hand experience with other tools, other than setting them up and running for these experiements for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should be taken with a grain of salt until they are independently confirmed by other people.
+As the developer of Duplicacy, I have little first-hand experience with other tools, other than setting them up and running for these experiements for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should not be viewed as conclusive until they are independently confirmed by other people.
 
 ## Setup
 
