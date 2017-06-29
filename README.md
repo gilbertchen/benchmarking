@@ -11,7 +11,7 @@ All tests were performed on a Mac mini 2012 model running macOS Sierra (10.12.3)
 
 The following table lists serveral important configuration parameters or algorithms that may have significant impact on the overall performance.
 
-| Configuration      |   Duplicacy   |   restic              |   Attic    |  duplicity  | 
+|                    |   Duplicacy   |   restic              |   Attic    |  duplicity  | 
 |:------------------:|:-------------:|:---------------------:|:----------:|:-----------:|
 | Version            |   2.0.3      |    0.6.1               |    BorgBackup 1.1.0b6    |    0.7.12    |
 | Average chunk size |     1MB<sup>[1]</sup>     |    1MB               |     2MB    |     25MB     |
@@ -33,7 +33,7 @@ Backups were all saved to a storage directory on the same hard disk as the code 
 
 Here are the elapsed real times (in seconds) as reported by the `time` command, with the user CPU times and sytem CPU times in the parentheses:
 
-| Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
+|                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
 | Initial backup | 13.7 ( 16.9 , 1.6 ) | 20.7 ( 69.9 , 9.9 ) | 26.9 ( 23.1 , 3.1 ) | 44.2 ( 56.3 , 4.6 ) | 
 | 2nd backup | 4.8 ( 4.8 , 0.5 ) | 8.0 ( 15.3 , 2.5 ) | 15.4 ( 13.4 , 1.5 ) | 19.5 ( 17.9 , 1.1 ) | 
@@ -53,7 +53,7 @@ Clearly Duplicacy was the winner by a confortable margin.  It is interesting tha
 
 Now let us look at the sizes of the backup storage after each backup:
 
-| Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
+|                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
 | Initial Backup     | 224MB | 631MB | 259MB | 183MB |
 | 2nd Backup         | 246MB | 692MB | 280MB | 185MB |
@@ -73,7 +73,7 @@ Although duplicity was the most storage efficient, it should be noted that it us
 
 We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups created later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, chunks in Duplicacy are independent entities and are not packed, so any backup can be quickly restored from chunks that compose that backup, without the need to retrieve data from other backups.
 
-| Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
+|                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
 | Initial backup | 38.8 ( 18.4 , 11.5 ) | 38.4 ( 17.3 , 8.6 ) | 81.5 ( 18.8 , 12.5 ) | 251.6 ( 133.4 , 51.9 ) | 
 | 2nd backup | 35.2 ( 11.5 , 12.9 ) | 92.7 ( 25.1 , 12.6 ) | 41.1 ( 17.0 , 11.4 ) | 256.6 ( 133.7 , 48.4 ) | 
