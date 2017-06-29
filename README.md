@@ -89,3 +89,20 @@ We also ran linux-restore-test.sh to test restore speeds.  The destination direc
 | 12th backup | 76.4 ( 20.4 , 13.1 ) | 387.7 ( 33.4 , 24.7 ) | 103.2 ( 23.1 , 16.1 ) | 240.3 ( 134.9 , 44.8 ) | 
 
 
+## Backing up a VirtualBox virtual machine
+
+In the second test, we are going to back up a VirtualBox virtual machine file.  The base disk image is a 64 bit CentOS 7  release, downloaded from http://www.osboxes.org/centos/.
+
+The first backup was performed right after the virtual machine had been set up without installing any software.  The second backup was performed after installing the command developer tools using the command `yum groupinstall 'Development Tools'`.  The third backup was performed after a power on immediately followed by a power off.
+
+|                    |   Duplicacy (default setting)  | Duplicacy (no file hash) |   restic   |   Attic    |  duplicity  | 
+|:------------------:|:----------------:|:----------:|:----------:|:-----------:|
+| Initial backup | 75.8 ( 96.5 , 3.5 ) | 45.1 ( 59.3 , 3.5) | 140.6 ( 114.6 , 13.9 ) | 56.7 ( 45.8 , 5.0 ) | 253.0 ( 222.2 , 17.7 ) | 
+| 2nd backup | 46.0 ( 48.2 , 2.1 ) | 36.9 ( 39.4 , 1.9) | 34.8 ( 71.7 , 4.6 ) | 40.6 ( 35.3 , 2.6 ) | 324.1 ( 331.0 , 4.8 ) | 
+| 3rd backup | 42.0 ( 39.4 , 1.4 ) | 35.3 ( 33.5 , 1.5) | 16.9 ( 53.4 , 2.1 ) | 36.1 ( 31.0 , 1.7 ) | 40.2 ( 33.6 , 2.1 ) | 
+
+|                    |   Duplicacy (default setting)  | Duplicacy (no file hash)  |   restic   |   Attic    |  duplicity  | 
+|:------------------:|:----------------:|:----------:|:----------:|:-----------:|
+| Initial backup | 123.4 ( 48.7 , 5.6 ) | 93.8 ( 24.2 , 5.8 ) | 212.5 ( 49.9 , 6.8 ) | 121.4 ( 31.2 , 6.6 ) | 735.1 ( 190.2 , 87.6 ) | 
+| 2nd backup | 184.4 ( 73.9 , 6.9 ) | 99.0 ( 27.0 , 5.3 ) | 244.2 ( 60.7 , 8.5 ) | 134.2 ( 35.0 , 7.6 ) | 846.8 ( 193.2 , 87.8 ) | 
+| 3rd backup | 184.5 ( 73.0 , 7.0 ) | 139.7 ( 27.0 , 5.0 ) | 260.2 ( 58.8 , 8.1 ) | 125.6 ( 35.1 , 7.3 ) | 849.9 ( 192.2 , 89.3 ) | 
