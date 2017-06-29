@@ -3,7 +3,7 @@
 To compare the performance and storage efficiency of 4 backup tools, [Duplicacy](https://github.com/gilbertchen/duplicacy), [restic](https://github.com/restic/restic), [Attic](https://github.com/borgbackup/borg), and [duplicity](http://duplicity.nongnu.org/)
 
 ## Disclaimer
-As the developer of Duplicacy, I have little firsh-hand experience with other tools, other than setting them up and running for these experiements for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should be taken with a grain of salt until they are independently confirmed by other people.
+As the developer of Duplicacy, I have little first-hand experience with other tools, other than setting them up and running for these experiements for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should be taken with a grain of salt until they are independently confirmed by other people.
 
 ## Setup
 
@@ -55,16 +55,24 @@ Now let us look at the sizes of the backup storage after each backup:
 
 | Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
-| Initial Backup     | 223MB | 631MB | 259MB | 183MB |
-| 2nd Backup         | 244MB | 692MB | 280MB | 185MB |
-| 3rd Backup         | 331MB | 912MB | 367MB | 203MB |
-| 4th Backup         | 339MB | 934MB | 374MB | 204MB |
-| 5th Backup         | 427MB | 1.1GB | 466MB | 222MB |
-| 6th Backup         | 455MB | 1.2GB | 492MB | 224MB |
+| Initial Backup     | 224MB | 631MB | 259MB | 183MB |
+| 2nd Backup         | 246MB | 692MB | 280MB | 185MB |
+| 3rd Backup         | 333MB | 912MB | 367MB | 203MB |
+| 4th Backup         | 340MB | 934MB | 373MB | 204MB |
+| 5th Backup         | 429MB | 1.1GB | 466MB | 222MB |
+| 6th Backup         | 457MB | 1.2GB | 492MB | 224MB |
+
+| 7th Backup         | 475MB | 1.2GB | 504MB | 227MB |
+| 8th Backup         | 576MB | 1.5GB | 607MB | 247MB |
+| 9th Backup         | 609MB | 1.6GB | 636MB | 251MB |
+| 10th Backup        | 706MB | 1.8GB | 739MB | 268MB |
+| 11th Backup        | 734MB | 1.9GB | 766MB | 270MB |
+| 12th Backup        | 834MB | 2.2GB | 869MB | 294MB |
+
 
 Although duplicity was the most storage efficient, it should be noted that it uses zlib, which is known to compress better than lz4 used by Duplicacy and Attic.  Moreoever, duplicity has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup in duplicity saves a lot of storage space, it is also dependent on previous backups, making it impossible to delete any single backup on a long chain of dependent backups. So there is always a dilemma of how often to perform a full backup for duplicity users.
 
-We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups create later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, Duplicacy doesn't pack chunks, and any backup can be quickly restored from chunks that contained in that backup, with to the need to retrieve data from other backups.
+We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups create later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, Duplicacy doesn't pack chunks, so any backup can be quickly restored from chunks that are contained in that backup, without the need to retrieve data from other backups.
 
 | Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
