@@ -25,7 +25,7 @@ The following table lists serveral important configuration parameters or algorit
 
 ## Backing up the Linux code base
 
-We chose the Linux code base (https://github.com/torvalds/linux) mostly because it is the largest github repository we could find and it has frequent commits (good for testing incremental backups).  Its size is 1.76G with about 58K files, so it is relatively small, but it represents a popular use case where a backup tool runs alongside a version control program such as git to frequently save changes made between checkins.
+We chose the [Linux code base](https://github.com/torvalds/linux) mostly because it is the largest github repository we could find and it has frequent commits (good for testing incremental backups).  Its size is 1.76G with about 58K files, so it is relatively small, but it represents a popular use case where a backup tool runs alongside a version control program such as git to frequently save changes made between checkins.
 
 To test incremental backup, we selected a commit on July 2016 and rolled back the entire code base to that commit. After the initial backup was finished, we selected other commits that were about one month apart, applied them one by one to emulate incremental changes and then performed subsequent backups accordingly.  Details can be found in linux-backup-test.sh.
 
