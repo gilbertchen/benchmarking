@@ -61,7 +61,6 @@ Now let us look at the sizes of the backup storage after each backup:
 | 4th Backup         | 340MB | 934MB | 373MB | 204MB |
 | 5th Backup         | 429MB | 1.1GB | 466MB | 222MB |
 | 6th Backup         | 457MB | 1.2GB | 492MB | 224MB |
-
 | 7th Backup         | 475MB | 1.2GB | 504MB | 227MB |
 | 8th Backup         | 576MB | 1.5GB | 607MB | 247MB |
 | 9th Backup         | 609MB | 1.6GB | 636MB | 251MB |
