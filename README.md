@@ -29,7 +29,7 @@ We chose the Linux code base (https://github.com/torvalds/linux) mostly because 
 
 To test incremental backup, we selected a commit on July 2016 and rolled back the entire code base to that commit. After the initial backup was finished, we selected other commits that were about one month apart, applied them one by one to emulate incremental changes and then performed subsequent backups accordingly.  Details can be found in linux-backup-test.sh.
 
-Backups were all saved to a storage directory on the same hard disk as the code base, to eliminate the performance variations caused by different implementation of networked or cloud storage backends.
+Backups were all saved to a storage directory on the same hard disk as the code base, to eliminate the performance variations introduced by different implementation of networked or cloud storage backends.
 
 Here are the elapsed real times (in seconds) as reported by the `time` command, with the user CPU times and sytem CPU times in the parentheses:
 
@@ -49,7 +49,7 @@ Here are the elapsed real times (in seconds) as reported by the `time` command, 
 | 12th backup | 7.4 ( 8.8 , 1.0 ) | 12.0 ( 38.4 , 4.0 ) | 21.7 ( 18.4 , 2.2 ) | 37.4 ( 37.0 , 2.0 ) | 
 
 
-Clearly Duplicacy was the winner by a confortable margin.  It is interesting that restic, while being the second fastest, consumed excessive CPU (especially during the initial backup) such that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down the backup speeds.
+Clearly Duplicacy was the winner by a confortable margin.  It is interesting that restic, while being the second fastest, consumed excessive CPU (especially during the initial backup) such that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down its backup speeds.
 
 Now let us look at the sizes of the backup storage after each backup:
 
@@ -72,7 +72,7 @@ Now let us look at the sizes of the backup storage after each backup:
 
 Although duplicity was the most storage efficient, it should be noted that it uses zlib, which is known to compress better than lz4 used by Duplicacy and Attic.  Moreoever, duplicity has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup in duplicity saves a lot of storage space, it is also dependent on previous backups, making it impossible to delete any single backup on a long chain of dependent backups. So there is always a dilemma of how often to perform a full backup for duplicity users.
 
-We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups create later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, Duplicacy doesn't pack chunks, so any backup can be quickly restored from chunks that are contained in that backup, without the need to retrieve data from other backups.
+We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups created later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, chunks in Duplicacy are independent entities and are not packed, so any backup can be quickly restored from chunks that compose that backup, without the need to retrieve data from other backups.
 
 | Backup             |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
