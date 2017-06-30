@@ -19,15 +19,15 @@ The following table lists serveral important configuration parameters or algorit
 | Compression        |    lz4        |    not impelmented    |    lz4     | zlib level 1|
 | Encryption         |    AES-GCM    |   AES-CTR             |  AES-CTR   |  GnuPG      |
 
-[1] The chunk size in Duplicacy is configurable with the default being 4MB.  We set it to 1MB to match that of restic
+[1] The chunk size in Duplicacy is configurable with the default being 4MB.  It was set it to 1MB to match that of restic
 
 [2] Enabled by `-e repokey-blake2` which is only available in 1.1.0+
 
 ## Backing up the Linux code base
 
-The first dataset we chose is the [Linux code base](https://github.com/torvalds/linux) mostly because it is the largest github repository we could find and it has frequent commits (good for testing incremental backups).  Its size is 1.76G with about 58K files, so it is a relatively small repository consisting of small files, but it represents a popular use case where a backup tool runs alongside a version control program such as git to frequently save changes made between checkins.
+The first dataset is the [Linux code base](https://github.com/torvalds/linux) mostly because it is the largest github repository that we could find and it has frequent commits (good for testing incremental backups).  Its size is 1.76 GB with about 58K files, so it is a relatively small repository consisting of small files, but it represents a popular use case where a backup tool runs alongside a version control program such as git to frequently save changes made between checkins.
 
-To test incremental backup, we selected a commit on July 2016 and rolled back the entire code base to that commit. After the initial backup was finished, we selected other commits that were about one month apart, applied them one by one to emulate incremental changes and then performed subsequent backups accordingly.  Details can be found in linux-backup-test.sh.
+To test incremental backup, a random commit on July 2016 was selected, and the entire code base is rolled back to that commit. After the initial backup was finished, other commits were chosen such that they were about one month apart.  The code base is then moved forward at these commits one by one to emulate incremental changes and then performed subsequent backups accordingly.  Details can be found in linux-backup-test.sh.
 
 Backups were all saved to a storage directory on the same hard disk as the code base, to eliminate the performance variations introduced by different implementation of networked or cloud storage backends.
 
@@ -49,7 +49,7 @@ Here are the elapsed real times (in seconds) as reported by the `time` command, 
 | 12th backup | 7.4 (8.8, 1.0) | 12.0 (38.4, 4.0) | 21.7 (18.4, 2.2) | 37.4 (37.0, 2.0) | 
 
 
-Clearly Duplicacy was the winner by a confortable margin.  It is interesting that restic, while being the second fastest, consumed excessive CPU (especially during the initial backup) such that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down its backup speeds.
+Clearly Duplicacy was the winner by a confortable margin.  It is interesting that restic, while being the second fastest, consumed far more CPU times than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines, since it is written in GO) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down its backup speeds.
 
 Now let us look at the sizes of the backup storage after each backup:
 
@@ -69,9 +69,9 @@ Now let us look at the sizes of the backup storage after each backup:
 | 12th backup        | 834MB | 2.2GB | 869MB | 294MB |
 
 
-Although duplicity was the most storage efficient, it should be noted that it uses zlib, which is known to compress better than lz4 used by Duplicacy and Attic.  Moreoever, duplicity has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup in duplicity saves a lot of storage space, it is also dependent on previous backups, making it impossible to delete any single backup on a long chain of dependent backups. So there is always a dilemma of how often to perform a full backup for duplicity users.
+Although duplicity was the most storage efficient, it should be noted that it uses zlib, which is known to compress better than lz4 used by Duplicacy and Attic.  Moreoever, duplicity has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup saves a lot of storage space, it is also dependent on previous backups due to the design of duplicity, making it impossible to delete any single backup on a long chain of dependent backups. So there is always a dilemma of how often to perform a full backup for duplicity users.
 
-We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore, which is not supported by restic.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups created later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, chunks in Duplicacy are independent entities and are not packed, so any backup can be quickly restored from chunks that compose that backup, without the need to retrieve data from other backups.
+We also ran linux-restore-test.sh to test restore speeds.  The destination directory was emptied before each restore, so we only test full restore, not incremental restore.  Again, Duplicacy is not only the fastest but also the most table.  The restore times of restic and Attic increased considerably for backups created later, with restic's performance deteriorating far more quickly.  This is perhaps due to to fact that both restic and Attic group a number of chunks into a pack, so to restore a later backup one may need to unpack a pack belonging to an earlier backup to retrieve a shared chunk.  In constrast, chunks in Duplicacy are independent entities and are not packed, so any backup can be quickly restored from chunks that compose that backup, without the need to retrieve data from other backups.
 
 |                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
@@ -91,13 +91,13 @@ We also ran linux-restore-test.sh to test restore speeds.  The destination direc
 
 ## Backing up a VirtualBox virtual machine
 
-In the second test was targeted at the other end of the spectrum - a dataset with fewer but much larger files.  Virtual machine files typically fall into this category.  The particular dataset we used for this test is a VirtualBox virtual machine file.  The base disk image is 64 bit CentOS 7, downloaded from http://www.osboxes.org/centos/.  Its size is about 4GB, still a small dataset compared to those virtual machines that actually used everday and routinely backed up, but it is enough to quantify performance differences between these 4 backup tools.
+In the second test was targeted at the other end of the spectrum - a dataset with fewer but much larger files.  Virtual machine files typically fall into this category.  The particular dataset for this test is a VirtualBox virtual machine file.  The base disk image is 64 bit CentOS 7, downloaded from http://www.osboxes.org/centos/.  Its size is about 4 GB, still small compared to virtual machines that are actually being used everday, but it is enough to quantify performance differences between these 4 backup tools.
 
 The first backup was performed right after the virtual machine had been set up without installing any software.  The second backup was performed after installing common developer tools using the command `yum groupinstall 'Development Tools'`.  The third backup was performed after a power on immediately followed by a power off.
 
-The following table lists the restore times by these 4 tools.  With default settings, Duplicacy was generally slower than Attic.  However, this is mainly because Attic does not [compute file hashes](https://www.bountysource.com/issues/31735500-show-which-distinct-versions-of-a-file-exist).  Therefore, we added an option to disable file hash computation and that made Duplicacy slightly faster than Attic.  This is not to say that we would recommend this option to our users.  File hashes are not just for convenience (for instance, file hashes makes it easy to tell which files in old backups are changed), they are the indispensable guard against data corruption.  Without them, it is impossible to assure t. Slight performance gains are not worth the risk of data corruption.
+The following table lists the restore times by these 4 tools.  With default settings, Duplicacy was generally slower than Attic.  However, this is mainly because Attic does not [compute file hashes](https://www.bountysource.com/issues/31735500-show-which-distinct-versions-of-a-file-exist), while Duplicacy does.  For a fair comparison, an option is added to Duplicacy to disable file hash computation and that made Duplicacy slightly faster than Attic.  This is not to say that Duplicacy should make this option the default.  Although chunk hashes along can guarantee the integrity of backups, file hashes can be useful in many ways. For instance, file hashes enables users to quickly identify which files in existing backups are changed.  They also allow third-party tools to compare files on disks to those in the backups.  Therefore, it is unlikely that Duplicacy will stop computing file hashes by default in favor of slight performance gains.
 
-
+Surpringly, for the third backup restic was the fastest.  This can be explained partly by the lack of compression, partly by the high CPU usage.
 
 |                    |   Duplicacy (default settings)  | Duplicacy (no file hash) |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
@@ -105,15 +105,22 @@ The following table lists the restore times by these 4 tools.  With default sett
 | 2nd backup | 49.4 (52.9, 2.0) | 36.5 (40.8, 2.1) | 32.2 (70.4, 4.8) | 39.2 (34.2, 2.4) | 334.3 (343.4, 4.6) | 
 | 3rd backup | 45.7 (44.6, 1.4) | 34.5 (33.1, 1.4) | 17.3 (55.1, 2.2) | 36.1 (31.8, 1.7) | 42.0 (35.3, 2.2) | 
  
+Not surpringly, duplicacy is still the most storage efficient with restic being the worst:
+
 |                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
 | Initial backup     | 2.0G | 4.1G | 2.0G | 1.7G |
 | 2nd backup         | 2.6G | 5.0G | 2.6G | 1.9G |
 | 3rd backup         | 2.6G | 5.1G | 2.7G | 1.9G |
 
+A full restore was also performed for each backup.  Again, by not computing the file hash helped improve the performance, but at the risk of possible undetected data corruption. 
 
 |                    |   Duplicacy (default settings)  | Duplicacy (no file hash)  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
 | 1st restore | 130.5 (72.4, 5.7) | 76.8 (23.7, 4.2) | 202.6 (52.1, 7.1) | 99.6 (30.9, 6.6) | 728.3 (195.6, 87.0) | 
 | 2nd restore | 138.9 (79.4, 5.4) | 121.5 (27.8, 6.6) | 230.8 (59.5, 8.3) | 115.7 (35.6, 7.8) | 720.5 (191.2, 87.7) | 
 | 3rd restore | 145.4 (73.2, 5.4) | 123.9 (27.7, 6.6) | 244.8 (59.8, 8.1) | 122.2 (35.7, 7.9) | 749.7 (196.1, 87.9) | 
+
+## Conclusion
+
+
