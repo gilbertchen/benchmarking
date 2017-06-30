@@ -1,6 +1,6 @@
 ## Objective
 
-To compare the performance and storage efficiency of 4 backup tools, [Duplicacy](https://github.com/gilbertchen/duplicacy), [restic](https://github.com/restic/restic), [Attic](https://github.com/borgbackup/borg), and [duplicity](http://duplicity.nongnu.org/)
+To benchmark the performance and storage efficiency of 4 backup tools, [Duplicacy](https://github.com/gilbertchen/duplicacy), [restic](https://github.com/restic/restic), [Attic](https://github.com/borgbackup/borg), and [duplicity](http://duplicity.nongnu.org/), using datasets that are publicly available.
 
 ## Disclaimer
 As the developer of Duplicacy, I have little first-hand experience with other tools, other than setting them up and running for these experiements for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should not be viewed as conclusive until they are independently confirmed by other people.
@@ -25,7 +25,7 @@ The following table lists serveral important configuration parameters or algorit
 
 ## Backing up the Linux code base
 
-We chose the [Linux code base](https://github.com/torvalds/linux) mostly because it is the largest github repository we could find and it has frequent commits (good for testing incremental backups).  Its size is 1.76G with about 58K files, so it is relatively small, but it represents a popular use case where a backup tool runs alongside a version control program such as git to frequently save changes made between checkins.
+The first dataset we chose is the [Linux code base](https://github.com/torvalds/linux) mostly because it is the largest github repository we could find and it has frequent commits (good for testing incremental backups).  Its size is 1.76G with about 58K files, so it is a relatively small repository consisting of small files, but it represents a popular use case where a backup tool runs alongside a version control program such as git to frequently save changes made between checkins.
 
 To test incremental backup, we selected a commit on July 2016 and rolled back the entire code base to that commit. After the initial backup was finished, we selected other commits that were about one month apart, applied them one by one to emulate incremental changes and then performed subsequent backups accordingly.  Details can be found in linux-backup-test.sh.
 
@@ -91,7 +91,7 @@ We also ran linux-restore-test.sh to test restore speeds.  The destination direc
 
 ## Backing up a VirtualBox virtual machine
 
-In the second test, we are going to back up a VirtualBox virtual machine file.  The base disk image is a 64 bit CentOS 7  release, downloaded from http://www.osboxes.org/centos/.
+In the second test was targeted at the other end of the spectrum - a dataset with fewer but much larger files.  Virtual machine files typically fall into this category.  The particular dataset we used for this test is a VirtualBox virtual machine file.  The base disk image is 64 bit CentOS 7, downloaded from http://www.osboxes.org/centos/.  Its size is about 4GB, still a small dataset compared to those virtual machines that actually used everday and routinely backed up, but it is enough to quantify performance differences between these 4 backup tools.
 
 The first backup was performed right after the virtual machine had been set up without installing any software.  The second backup was performed after installing common developer tools using the command `yum groupinstall 'Development Tools'`.  The third backup was performed after a power on immediately followed by a power off.
 
