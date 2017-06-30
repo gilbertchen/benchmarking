@@ -35,18 +35,18 @@ Here are the elapsed real times (in seconds) as reported by the `time` command, 
 
 |                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
-| Initial backup | 13.7 ( 16.9 , 1.6 ) | 20.7 ( 69.9 , 9.9 ) | 26.9 ( 23.1 , 3.1 ) | 44.2 ( 56.3 , 4.6 ) | 
-| 2nd backup | 4.8 ( 4.8 , 0.5 ) | 8.0 ( 15.3 , 2.5 ) | 15.4 ( 13.4 , 1.5 ) | 19.5 ( 17.9 , 1.1 ) | 
-| 3rd backup | 6.9 ( 8.0 , 1.0 ) | 11.9 ( 32.2 , 4.0 ) | 19.6 ( 16.4 , 2.0 ) | 29.8 ( 29.3 , 1.9 ) | 
-| 4th backup | 3.3 ( 3.1 , 0.4 ) | 7.0 ( 12.7 , 2.2 ) | 13.7 ( 12.1 , 1.2 ) | 18.6 ( 17.3 , 0.9 ) | 
-| 5th backup | 9.9 ( 11.0 , 1.0 ) | 11.4 ( 33.5 , 3.8 ) | 19.9 ( 17.1 , 2.1 ) | 28.0 ( 27.6 , 1.5 ) | 
-| 6th backup | 3.8 ( 3.9 , 0.5 ) | 8.0 ( 17.7 , 2.7 ) | 16.8 ( 14.1 , 1.6 ) | 22.0 ( 20.7 , 1.0 ) | 
-| 7th backup | 5.1 ( 5.1 , 0.5 ) | 7.8 ( 16.0 , 2.4 ) | 14.3 ( 12.6 , 1.3 ) | 21.6 ( 20.3 , 1.0 ) | 
-| 8th backup | 9.5 ( 10.8 , 1.1 ) | 13.5 ( 49.3 , 4.8 ) | 18.3 ( 15.9 , 1.8 ) | 35.0 ( 33.6 , 1.9 ) | 
-| 9th backup | 4.3 ( 4.5 , 0.6 ) | 9.0 ( 20.6 , 2.8 ) | 15.7 ( 13.7 , 1.5 ) | 24.9 ( 23.6 , 1.1 ) | 
-| 10th backup | 7.9 ( 9.1 , 0.9 ) | 20.2 ( 38.4 , 4.7 ) | 32.2 ( 18.1 , 2.3 ) | 35.0 ( 33.8 , 1.8 ) | 
-| 11th backup | 4.6 ( 4.5 , 0.6 ) | 9.1 ( 19.6 , 2.8 ) | 16.8 ( 14.5 , 1.7 ) | 28.1 ( 26.4 , 1.3 ) | 
-| 12th backup | 7.4 ( 8.8 , 1.0 ) | 12.0 ( 38.4 , 4.0 ) | 21.7 ( 18.4 , 2.2 ) | 37.4 ( 37.0 , 2.0 ) | 
+| Initial backup | 13.7 (16.9, 1.6) | 20.7 (69.9, 9.9) | 26.9 (23.1, 3.1) | 44.2 (56.3, 4.6) | 
+| 2nd backup | 4.8 (4.8, 0.5) | 8.0 (15.3, 2.5) | 15.4 (13.4, 1.5) | 19.5 (17.9, 1.1) | 
+| 3rd backup | 6.9 (8.0, 1.0) | 11.9 (32.2, 4.0) | 19.6 (16.4, 2.0) | 29.8 (29.3, 1.9) | 
+| 4th backup | 3.3 (3.1, 0.4) | 7.0 (12.7, 2.2) | 13.7 (12.1, 1.2) | 18.6 (17.3, 0.9) | 
+| 5th backup | 9.9 (11.0, 1.0) | 11.4 (33.5, 3.8) | 19.9 (17.1, 2.1) | 28.0 (27.6, 1.5) | 
+| 6th backup | 3.8 (3.9, 0.5) | 8.0 (17.7, 2.7) | 16.8 (14.1, 1.6) | 22.0 (20.7, 1.0) | 
+| 7th backup | 5.1 (5.1, 0.5) | 7.8 (16.0, 2.4) | 14.3 (12.6, 1.3) | 21.6 (20.3, 1.0) | 
+| 8th backup | 9.5 (10.8, 1.1) | 13.5 (49.3, 4.8) | 18.3 (15.9, 1.8) | 35.0 (33.6, 1.9) | 
+| 9th backup | 4.3 (4.5, 0.6) | 9.0 (20.6, 2.8) | 15.7 (13.7, 1.5) | 24.9 (23.6, 1.1) | 
+| 10th backup | 7.9 (9.1, 0.9) | 20.2 (38.4, 4.7) | 32.2 (18.1, 2.3) | 35.0 (33.8, 1.8) | 
+| 11th backup | 4.6 (4.5, 0.6) | 9.1 (19.6, 2.8) | 16.8 (14.5, 1.7) | 28.1 (26.4, 1.3) | 
+| 12th backup | 7.4 (8.8, 1.0) | 12.0 (38.4, 4.0) | 21.7 (18.4, 2.2) | 37.4 (37.0, 2.0) | 
 
 
 Clearly Duplicacy was the winner by a confortable margin.  It is interesting that restic, while being the second fastest, consumed excessive CPU (especially during the initial backup) such that the user CPU times were a lot higher than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down its backup speeds.
@@ -75,34 +75,35 @@ We also ran linux-restore-test.sh to test restore speeds.  The destination direc
 
 |                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
-| Initial backup | 38.8 ( 18.4 , 11.5 ) | 38.4 ( 17.3 , 8.6 ) | 81.5 ( 18.8 , 12.5 ) | 251.6 ( 133.4 , 51.9 ) | 
-| 2nd backup | 35.2 ( 11.5 , 12.9 ) | 92.7 ( 25.1 , 12.6 ) | 41.1 ( 17.0 , 11.4 ) | 256.6 ( 133.7 , 48.4 ) | 
-| 3rd backup | 33.9 ( 9.7 , 10.9 ) | 136.7 ( 27.7 , 15.0 ) | 35.3 ( 17.3 , 11.5 ) | 231.4 ( 134.5 , 46.9 ) | 
-| 4th backup | 34.5 ( 14.0 , 10.8 ) | 149.7 ( 26.9 , 15.1 ) | 46.4 ( 17.9 , 12.5 ) | 213.8 ( 134.5 , 43.5 ) | 
-| 5th backup | 30.2 ( 9.4 , 9.4 ) | 198.3 ( 28.6 , 17.3 ) | 58.2 ( 18.9 , 13.3 ) | 236.4 ( 134.3 , 49.2 ) | 
-| 6th backup | 34.7 ( 11.2 , 9.3 ) | 348.6 ( 30.2 , 20.8 ) | 65.5 ( 19.5 , 13.4 ) | 250.7 ( 135.3 , 40.9 ) | 
-| 7th backup | 36.8 ( 9.2 , 9.6 ) | 238.8 ( 29.3 , 18.6 ) | 64.8 ( 19.4 , 13.6 ) | 225.7 ( 125.1 , 42.7 ) | 
-| 8th backup | 26.0 ( 9.7 , 8.1 ) | 251.5 ( 32.5 , 21.7 ) | 83.1 ( 20.9 , 14.3 ) | 261.0 ( 126.0 , 45.3 ) | 
-| 9th backup | 31.5 ( 8.8 , 8.7 ) | 269.5 ( 31.0 , 21.0 ) | 80.3 ( 20.5 , 14.1 ) | 230.6 ( 126.8 , 43.0 ) | 
-| 10th backup | 40.5 ( 8.7 , 8.1 ) | 290.6 ( 32.0 , 22.1 ) | 91.9 ( 21.5 , 15.0 ) | 242.4 ( 128.9 , 46.3 ) | 
-| 11th backup | 34.6 ( 8.3 , 7.6 ) | 472.7 ( 33.0 , 26.3 ) | 125.3 ( 22.3 , 15.1 ) | 278.5 ( 127.9 , 49.1 ) | 
-| 12th backup | 76.4 ( 20.4 , 13.1 ) | 387.7 ( 33.4 , 24.7 ) | 103.2 ( 23.1 , 16.1 ) | 240.3 ( 134.9 , 44.8 ) | 
+| 1st restore | 38.8 (18.4, 11.5) | 38.4 (17.3, 8.6) | 81.5 (18.8, 12.5) | 251.6 (133.4, 51.9) | 
+| 2nd restore | 35.2 (11.5, 12.9) | 92.7 (25.1, 12.6) | 41.1 (17.0, 11.4) | 256.6 (133.7, 48.4) | 
+| 3rd restore | 33.9 (9.7, 10.9) | 136.7 (27.7, 15.0) | 35.3 (17.3, 11.5) | 231.4 (134.5, 46.9) | 
+| 4th restore | 34.5 (14.0, 10.8) | 149.7 (26.9, 15.1) | 46.4 (17.9, 12.5) | 213.8 (134.5, 43.5) | 
+| 5th restore | 30.2 (9.4, 9.4) | 198.3 (28.6, 17.3) | 58.2 (18.9, 13.3) | 236.4 (134.3, 49.2) | 
+| 6th restore | 34.7 (11.2, 9.3) | 348.6 (30.2, 20.8) | 65.5 (19.5, 13.4) | 250.7 (135.3, 40.9) | 
+| 7th restore | 36.8 (9.2, 9.6) | 238.8 (29.3, 18.6) | 64.8 (19.4, 13.6) | 225.7 (125.1, 42.7) | 
+| 8th restore | 26.0 (9.7, 8.1) | 251.5 (32.5, 21.7) | 83.1 (20.9, 14.3) | 261.0 (126.0, 45.3) | 
+| 9th restore | 31.5 (8.8, 8.7) | 269.5 (31.0, 21.0) | 80.3 (20.5, 14.1) | 230.6 (126.8, 43.0) | 
+| 10th restore | 40.5 (8.7, 8.1) | 290.6 (32.0, 22.1) | 91.9 (21.5, 15.0) | 242.4 (128.9, 46.3) | 
+| 11th restore | 34.6 (8.3, 7.6) | 472.7 (33.0, 26.3) | 125.3 (22.3, 15.1) | 278.5 (127.9, 49.1) | 
+| 12th restore | 76.4 (20.4, 13.1) | 387.7 (33.4, 24.7) | 103.2 (23.1, 16.1) | 240.3 (134.9, 44.8) | 
 
 
 ## Backing up a VirtualBox virtual machine
 
 In the second test, we are going to back up a VirtualBox virtual machine file.  The base disk image is a 64 bit CentOS 7  release, downloaded from http://www.osboxes.org/centos/.
 
-The first backup was performed right after the virtual machine had been set up without installing any software.  The second backup was performed after installing the command developer tools using the command `yum groupinstall 'Development Tools'`.  The third backup was performed after a power on immediately followed by a power off.
+The first backup was performed right after the virtual machine had been set up without installing any software.  The second backup was performed after installing common developer tools using the command `yum groupinstall 'Development Tools'`.  The third backup was performed after a power on immediately followed by a power off.
 
 |                    |   Duplicacy (default setting)  | Duplicacy (no file hash) |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
-| Initial backup | 75.8 ( 96.5 , 3.5 ) | 45.1 ( 59.3 , 3.5) | 140.6 ( 114.6 , 13.9 ) | 56.7 ( 45.8 , 5.0 ) | 253.0 ( 222.2 , 17.7 ) | 
-| 2nd backup | 46.0 ( 48.2 , 2.1 ) | 36.9 ( 39.4 , 1.9) | 34.8 ( 71.7 , 4.6 ) | 40.6 ( 35.3 , 2.6 ) | 324.1 ( 331.0 , 4.8 ) | 
-| 3rd backup | 42.0 ( 39.4 , 1.4 ) | 35.3 ( 33.5 , 1.5) | 16.9 ( 53.4 , 2.1 ) | 36.1 ( 31.0 , 1.7 ) | 40.2 ( 33.6 , 2.1 ) | 
+| Initial backup | 80.6 (100.7, 3.3) | 41.4 (57.7, 3.2) | 136.5 (116.4, 13.7) | 47.6 (46.9, 4.9) | 255.6 (226.9, 18.5) | 
+| 2nd backup | 49.4 (52.9, 2.0) | 36.5 (40.8, 2.1) | 32.2 (70.4, 4.8) | 39.2 (34.2, 2.4) | 334.3 (343.4, 4.6) | 
+| 3rd backup | 45.7 (44.6, 1.4) | 34.5 (33.1, 1.4) | 17.3 (55.1, 2.2) | 36.1 (31.8, 1.7) | 42.0 (35.3, 2.2) | 
+ 
 
 |                    |   Duplicacy (default setting)  | Duplicacy (no file hash)  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
-| Initial backup | 123.4 ( 48.7 , 5.6 ) | 93.8 ( 24.2 , 5.8 ) | 212.5 ( 49.9 , 6.8 ) | 121.4 ( 31.2 , 6.6 ) | 735.1 ( 190.2 , 87.6 ) | 
-| 2nd backup | 184.4 ( 73.9 , 6.9 ) | 99.0 ( 27.0 , 5.3 ) | 244.2 ( 60.7 , 8.5 ) | 134.2 ( 35.0 , 7.6 ) | 846.8 ( 193.2 , 87.8 ) | 
-| 3rd backup | 184.5 ( 73.0 , 7.0 ) | 99.7 ( 27.0 , 5.0 ) | 260.2 ( 58.8 , 8.1 ) | 125.6 ( 35.1 , 7.3 ) | 849.9 ( 192.2 , 89.3 ) | 
+| 1st restore | 130.5 (72.4, 5.7) | 76.8 (23.7, 4.2) | 202.6 (52.1, 7.1) | 99.6 (30.9, 6.6) | 728.3 (195.6, 87.0) | 
+| 2nd restore | 138.9 (79.4, 5.4) | 121.5 (27.8, 6.6) | 230.8 (59.5, 8.3) | 115.7 (35.6, 7.8) | 720.5 (191.2, 87.7) | 
+| 3rd restore | 145.4 (73.2, 5.4) | 123.9 (27.7, 6.6) | 244.8 (59.8, 8.1) | 122.2 (35.7, 7.9) | 749.7 (196.1, 87.9) | 
