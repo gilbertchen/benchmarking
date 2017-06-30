@@ -95,7 +95,11 @@ In the second test, we are going to back up a VirtualBox virtual machine file.  
 
 The first backup was performed right after the virtual machine had been set up without installing any software.  The second backup was performed after installing common developer tools using the command `yum groupinstall 'Development Tools'`.  The third backup was performed after a power on immediately followed by a power off.
 
-|                    |   Duplicacy (default setting)  | Duplicacy (no file hash) |   restic   |   Attic    |  duplicity  | 
+The following table lists the restore times by these 4 tools.  With default settings, Duplicacy was generally slower than Attic.  However, this is mainly because Attic does not [compute file hashes](https://www.bountysource.com/issues/31735500-show-which-distinct-versions-of-a-file-exist).  Therefore, we added an option to disable file hash computation and that made Duplicacy slightly faster than Attic.  This is not to say that we would recommend this option to our users.  File hashes are not just for convenience (for instance, file hashes makes it easy to tell which files in old backups are changed), they are the indispensable guard against data corruption.  Without them, it is impossible to assure t. Slight performance gains are not worth the risk of data corruption.
+
+
+
+|                    |   Duplicacy (default settings)  | Duplicacy (no file hash) |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
 | Initial backup | 80.6 (100.7, 3.3) | 41.4 (57.7, 3.2) | 136.5 (116.4, 13.7) | 47.6 (46.9, 4.9) | 255.6 (226.9, 18.5) | 
 | 2nd backup | 49.4 (52.9, 2.0) | 36.5 (40.8, 2.1) | 32.2 (70.4, 4.8) | 39.2 (34.2, 2.4) | 334.3 (343.4, 4.6) | 
@@ -108,7 +112,7 @@ The first backup was performed right after the virtual machine had been set up w
 | 3rd backup         | 2.6G | 5.1G | 2.7G | 1.9G |
 
 
-|                    |   Duplicacy (default setting)  | Duplicacy (no file hash)  |   restic   |   Attic    |  duplicity  | 
+|                    |   Duplicacy (default settings)  | Duplicacy (no file hash)  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
 | 1st restore | 130.5 (72.4, 5.7) | 76.8 (23.7, 4.2) | 202.6 (52.1, 7.1) | 99.6 (30.9, 6.6) | 728.3 (195.6, 87.0) | 
 | 2nd restore | 138.9 (79.4, 5.4) | 121.5 (27.8, 6.6) | 230.8 (59.5, 8.3) | 115.7 (35.6, 7.8) | 720.5 (191.2, 87.7) | 
