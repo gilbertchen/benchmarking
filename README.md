@@ -55,18 +55,18 @@ Now let us look at the sizes of the backup storage after each backup:
 
 |                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
-| Initial Backup     | 224MB | 631MB | 259MB | 183MB |
-| 2nd Backup         | 246MB | 692MB | 280MB | 185MB |
-| 3rd Backup         | 333MB | 912MB | 367MB | 203MB |
-| 4th Backup         | 340MB | 934MB | 373MB | 204MB |
-| 5th Backup         | 429MB | 1.1GB | 466MB | 222MB |
-| 6th Backup         | 457MB | 1.2GB | 492MB | 224MB |
-| 7th Backup         | 475MB | 1.2GB | 504MB | 227MB |
-| 8th Backup         | 576MB | 1.5GB | 607MB | 247MB |
-| 9th Backup         | 609MB | 1.6GB | 636MB | 251MB |
-| 10th Backup        | 706MB | 1.8GB | 739MB | 268MB |
-| 11th Backup        | 734MB | 1.9GB | 766MB | 270MB |
-| 12th Backup        | 834MB | 2.2GB | 869MB | 294MB |
+| Initial backup     | 224MB | 631MB | 259MB | 183MB |
+| 2nd backup         | 246MB | 692MB | 280MB | 185MB |
+| 3rd backup         | 333MB | 912MB | 367MB | 203MB |
+| 4th backup         | 340MB | 934MB | 373MB | 204MB |
+| 5th backup         | 429MB | 1.1GB | 466MB | 222MB |
+| 6th backup         | 457MB | 1.2GB | 492MB | 224MB |
+| 7th backup         | 475MB | 1.2GB | 504MB | 227MB |
+| 8th backup         | 576MB | 1.5GB | 607MB | 247MB |
+| 9th backup         | 609MB | 1.6GB | 636MB | 251MB |
+| 10th backup        | 706MB | 1.8GB | 739MB | 268MB |
+| 11th backup        | 734MB | 1.9GB | 766MB | 270MB |
+| 12th backup        | 834MB | 2.2GB | 869MB | 294MB |
 
 
 Although duplicity was the most storage efficient, it should be noted that it uses zlib, which is known to compress better than lz4 used by Duplicacy and Attic.  Moreoever, duplicity has a serious flaw in its incremental model -- the user has to decide whether to perform a full backup or an incremental backup on each run.  That is because while an incremental backup in duplicity saves a lot of storage space, it is also dependent on previous backups, making it impossible to delete any single backup on a long chain of dependent backups. So there is always a dilemma of how often to perform a full backup for duplicity users.
@@ -101,6 +101,12 @@ The first backup was performed right after the virtual machine had been set up w
 | 2nd backup | 49.4 (52.9, 2.0) | 36.5 (40.8, 2.1) | 32.2 (70.4, 4.8) | 39.2 (34.2, 2.4) | 334.3 (343.4, 4.6) | 
 | 3rd backup | 45.7 (44.6, 1.4) | 34.5 (33.1, 1.4) | 17.3 (55.1, 2.2) | 36.1 (31.8, 1.7) | 42.0 (35.3, 2.2) | 
  
+|                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
+|:------------------:|:----------------:|:----------:|:----------:|:-----------:|
+| Initial backup     | 2.0G | 4.1G | 2.0G | 1.7G |
+| 2nd backup         | 2.6G | 5.0G | 2.6G | 1.9G |
+| 3rd backup         | 2.6G | 5.1G | 2.7G | 1.9G |
+
 
 |                    |   Duplicacy (default setting)  | Duplicacy (no file hash)  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
