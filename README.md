@@ -3,20 +3,20 @@
 To benchmark the performance and storage efficiency of 4 backup tools, [Duplicacy](https://github.com/gilbertchen/duplicacy), [restic](https://github.com/restic/restic), [Attic](https://github.com/borgbackup/borg), and [duplicity](http://duplicity.nongnu.org/), using datasets that are publicly available.
 
 ## Disclaimer
-As the developer of Duplicacy, I have little first-hand experience with other tools, other than setting them up and running for these experiements for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should not be viewed as conclusive until they are independently confirmed by other people.
+As the developer of Duplicacy, I have little first-hand experience with other tools, other than setting them up and running for these experiments for the first time for this performance study.  It is highly possible that configurations for other tools may not be optimal.  Therefore, results presented here should not be viewed as conclusive until they are independently confirmed by other people.
 
 ## Setup
 
 All tests were performed on a Mac mini 2012 model running macOS Sierra (10.12.3), with a 2.3 GHZ Intel i7 4-core processor and 16 GB memory.
 
-The following table lists serveral important configuration parameters or algorithms that may have significant impact on the overall performance.
+The following table lists several important configuration parameters or algorithms that may have significant impact on the overall performance.
 
 |                    |   Duplicacy   |   restic              |   Attic    |  duplicity  | 
 |:------------------:|:-------------:|:---------------------:|:----------:|:-----------:|
 | Version            |   2.0.3      |    0.6.1               |    BorgBackup 1.1.0b6    |    0.7.12    |
 | Average chunk size |     1MB<sup>[1]</sup>     |    1MB               |     2MB    |     25MB     |
 | Hash               |     blake2    |    SHA256             |  blake2 <sup>[2]</sup>|  SHA1    |
-| Compression        |    lz4        |    not impelmented    |    lz4     | zlib level 1|
+| Compression        |    lz4        |    not implemented    |    lz4     | zlib level 1|
 | Encryption         |    AES-GCM    |   AES-CTR             |  AES-CTR   |  GnuPG      |
 
 [1] The chunk size in Duplicacy is configurable with the default being 4MB.  It was set it to 1MB to match that of restic
@@ -31,7 +31,7 @@ To test incremental backup, a random commit on July 2016 was selected, and the e
 
 Backups were all saved to a storage directory on the same hard disk as the code base, to eliminate the performance variations introduced by different implementation of networked or cloud storage backends.
 
-Here are the elapsed real times (in seconds) as reported by the `time` command, with the user CPU times and sytem CPU times in the parentheses:
+Here are the elapsed real times (in seconds) as reported by the `time` command, with the user CPU times and system CPU times in the parentheses:
 
 |                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
@@ -49,7 +49,7 @@ Here are the elapsed real times (in seconds) as reported by the `time` command, 
 | 12th backup | 7.4 (8.8, 1.0) | 12.0 (38.4, 4.0) | 21.7 (18.4, 2.2) | 37.4 (37.0, 2.0) | 
 
 
-Clearly Duplicacy was the winner by a confortable margin.  It is interesting that restic, while being the second fastest, consumed far more CPU times than the eleapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines, since it is written in GO) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down its backup speeds.
+Clearly Duplicacy was the winner by a comfortable margin.  It is interesting that restic, while being the second fastest, consumed far more CPU times than the elapsed real times, which is bad for the user case where users want to keep the backup tool running in the background to minimize the interference with other tasks.  This could be caused by using too many threads (or more precisely goroutines, since it is written in GO) in its local storage backend implementation.  However, even if this issue is fixable, as restic currently does not support compression, the addition of compression will only further slow down its backup speeds.
 
 Now let us look at the sizes of the backup storage after each backup:
 
