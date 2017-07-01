@@ -123,4 +123,7 @@ A full restore was also performed for each backup.  Again, by not computing the 
 
 ## Conclusion
 
+The performances of 4 different backup tools on two publicly available datasets were compared.  Duplicacy is clearly the top performer for the first dataset and as fast as Attic for the second if the file hash computation is disabled.  However, it should be noted as both datasets are small and may be very different in nature from your data to be backed up.  Therefore, I strongly encourage you to run your own experiements using scripts available in this github repository in order to decide which backup tool to use.
 
+
+It should also be noted that performance is not the only factor in determining which tool is the best for your user case.  
