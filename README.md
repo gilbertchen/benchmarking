@@ -105,7 +105,7 @@ Surprisingly, for the third backup restic was the fastest.  This can be explaine
 | 2nd backup | 49.4 (52.9, 2.0) | 36.5 (40.8, 2.1) | 32.2 (70.4, 4.8) | 39.2 (34.2, 2.4) | 334.3 (343.4, 4.6) | 
 | 3rd backup | 45.7 (44.6, 1.4) | 34.5 (33.1, 1.4) | 17.3 (55.1, 2.2) | 36.1 (31.8, 1.7) | 42.0 (35.3, 2.2) | 
  
-Not surprisingly, duplicityy is still the most storage efficient with restic being the worst:
+Not surprisingly, duplicity is still the most storage efficient with restic being the worst:
 
 |                    |   Duplicacy  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------:|:----------:|:-----------:|
