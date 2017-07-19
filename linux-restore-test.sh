@@ -14,50 +14,10 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
-if [ -z "$DUPLICACY_PATH" ]; then
-    echo "DUPLICACY_PATH must be set to the path of the Duplicacy executable"
-    exit 1
-fi
-
-if [ -z "$RESTIC_PATH" ]; then
-    echo "RESTIC_PATH must be set to the path of the restic executable"
-    exit 1
-fi
-
-if [ -z "$ATTIC_PATH" ]; then
-    echo "ATTIC_PATH must be set to the path of the attic executable"
-    exit 1
-fi
-
-if [ -z "$DUPLICITY_PATH" ]; then
-    echo "DUPLICITY_PATH must be set to the path of the duplicity executable"
-    exit 1
-fi
-
-if [ -z "$GPG_KEY" ]; then
-    echo "GPG_KEY must be set for duplicity to work properly"
-    exit 1
-fi
-
-if [ -z "$PASSPHRASE" ]; then
-    echo "PASSPHRASE must be set for duplicity to work properly"
-    exit 1
-fi
 
 # Set up directories
-TEST_DIR=$1
-DUPLICACY_STORAGE=${TEST_DIR}/linux-duplicacy-storage
-RESTIC_STORAGE=${TEST_DIR}/linux-restic-storage
-ATTIC_STORAGE=${TEST_DIR}/linux-attic-storage
-DUPLICITY_STORAGE=${TEST_DIR}/linux-duplicity-storage
-
-DUPLICACY_RESTORE=${TEST_DIR}/linux-duplicacy-restore
-RESTIC_RESTORE=${TEST_DIR}/linux-restic-restore
-ATTIC_RESTORE=${TEST_DIR}/linux-attic-restore
-DUPLICITY_RESTORE=${TEST_DIR}/linux-duplicity-restore
-
-# Used as the storage password throughout the tests
-PASSWORD=12345678
+TEST_DIR="$1"
+source "common.sh"
 
 rm -rf ${DUPLICACY_RESTORE}
 mkdir -p ${DUPLICACY_RESTORE}
@@ -67,6 +27,8 @@ rm -rf ${ATTIC_RESTORE}
 mkdir -p ${ATTIC_RESTORE}
 rm -rf ${DUPLICITY_RESTORE}
 mkdir -p ${DUPLICITY_RESTORE}
+rm -rf ${RDEDUP_RESTORE}
+mkdir -p ${RDEDUP_RESTORE}
 
 function duplicacy_restore()
 {  
@@ -106,26 +68,52 @@ function duplicity_restore()
     time ${DUPLICITY_PATH} --force -v0 --encrypt-key ${GPG_KEY} restore -t $RESTORE_TIME file://${DUPLICITY_STORAGE} ${DUPLICITY_RESTORE}
 }
 
+function rdedup_restore()
+{
+    rm -rf ${RDEDUP_RESTORE}/* 
+    RESTORE_NAME="`${RDEDUP_PATH} --dir ${RDEDUP_STORAGE} list | sort | head -n $1 | tail -n 1`"
+    echo Restoring from $RESTORE_NAME
+    time bash -c "env RDEDUP_PASSPHRASE=${PASSWORD} ${RDEDUP_PATH} --dir ${RDEDUP_STORAGE} load $RESTORE_NAME | ${RDUP_PATH}-up -r ${BACKUP_DIR} ${RDEDUP_RESTORE}"
+}
+
+
 function all_restore()
 {
 
     echo ======================================== restore $1 ========================================
-    duplicacy_restore $1
-    restic_restore $1
-    attic_restore $1
-    duplicity_restore $1
+    if [ ! -z "$DUPLICACY_PATH" ]; then
+        duplicacy_restore $1
+    fi
+    if [ ! -z "$RESTIC_PATH" ]; then
+        restic_restore $1
+    fi
+    if [ ! -z "$ATTIC_PATH" ]; then
+        attic_restore $1
+    fi
+    if [ ! -z "$DUPLICITY_PATH" ]; then
+        duplicity_restore $1
+    fi
+    if [ ! -z "$RDEDUP_PATH" ]; then
+        rdedup_restore $1
+    fi
 }
 
 # Initialize the duplicacy directory to be restored
-pushd ${DUPLICACY_RESTORE}
-env DUPLICACY_PASSWORD=${PASSWORD} ${DUPLICACY_PATH} init test ${DUPLICACY_STORAGE} -e
-popd
+if [ ! -z "$DUPLICACY_PATH" ]; then
+    pushd ${DUPLICACY_RESTORE}
+    env DUPLICACY_PASSWORD=${PASSWORD} ${DUPLICACY_PATH} init test ${DUPLICACY_STORAGE} -e
+    popd
+fi
 
-echo restic snapshots:
-env RESTIC_PASSWORD=${PASSWORD} ${RESTIC_PATH} -r ${RESTIC_STORAGE} snapshots
+if [ ! -z "$RESTIC_PATH" ]; then
+    echo restic snapshots:
+    env RESTIC_PASSWORD=${PASSWORD} ${RESTIC_PATH} -r ${RESTIC_STORAGE} snapshots
+fi
 
-echo duplicity archives: 
-${DUPLICITY_PATH} -v0 --encrypt-key ${GPG_KEY} --sign-key ${GPG_KEY} collection-status file://${DUPLICITY_STORAGE} | grep "Full\|Incremental"
+if [ ! -z "$DUPLICITY_PATH" ]; then
+    echo duplicity archives: 
+    ${DUPLICITY_PATH} -v0 --encrypt-key ${GPG_KEY} --sign-key ${GPG_KEY} collection-status file://${DUPLICITY_STORAGE} | grep "Full\|Incremental"
+fi
 
 for i in `seq 1 12`; do
     all_restore $i
