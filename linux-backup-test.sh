@@ -32,7 +32,9 @@ fi
 
 function duplicacy_backup()
 {
+    pushd ${BACKUP_DIR}
     time env DUPLICACY_PASSWORD=${PASSWORD} ${DUPLICACY_PATH} backup -stats | grep -v Uploaded
+    popd
 }
 
 function restic_backup()
@@ -82,8 +84,10 @@ rm -rf ${BACKUP_DIR}/.duplicacy
 mkdir -p ${BACKUP_DIR}/.duplicacy
 
 if [ ! -z "$DUPLICACY_PATH" ]; then
+    pushd ${BACKUP_DIR}
     env DUPLICACY_PASSWORD=${PASSWORD} ${DUPLICACY_PATH} init test ${DUPLICACY_STORAGE} -e -c 1M
     echo "-.git/" > ${BACKUP_DIR}/.duplicacy/filters
+    popd
 fi
 
 if [ ! -z "$RESTIC_PATH" ]; then
