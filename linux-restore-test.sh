@@ -16,7 +16,7 @@ fi
 
 
 # Set up directories
-TEST_DIR="$1"
+TEST_DIR="`realpath $1`"
 source "common.sh"
 
 rm -rf ${DUPLICACY_RESTORE}
