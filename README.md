@@ -113,7 +113,7 @@ Not surprisingly, duplicity is still the most storage efficient with restic bein
 | 2nd backup         | 2.6G | 5.0G | 2.6G | 1.9G |
 | 3rd backup         | 2.6G | 5.1G | 2.7G | 1.9G |
 
-A full restore was also performed for each backup.  Again, by not computing the file hash helped improve the performance, but at the risk of possible undetected data corruption. 
+A full restore was also performed for each backup.  Again, not computing the file hash helped improve the performance, but at the risk of possible undetected data corruption. 
 
 |                    |   Duplicacy (default settings)  | Duplicacy (no file hash)  |   restic   |   Attic    |  duplicity  | 
 |:------------------:|:----------------:|:----------------:|:----------:|:----------:|:-----------:|
